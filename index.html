@@ -103,14 +103,16 @@
         #bg-canvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
+            width: 100dvw; height: 100dvh;
             z-index: 0;
         }
 
         .gradient-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
+            width: 100dvw; height: 100dvh;
             background:
                 radial-gradient(ellipse at 20% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 20%, rgba(212, 168, 83, 0.1) 0%, transparent 50%),
@@ -218,7 +220,7 @@
             margin-bottom: 3rem;
         }
 
-        /* ── Dad of the Decade CTA ── (Feature 15: CSS nesting) */
+        /* ── Dad of the Decade CTA ── */
         .dotd-link {
             position: relative;
             display: inline-flex;
@@ -238,79 +240,49 @@
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             overflow: hidden;
             cursor: pointer;
-
-            &::before {
-                content: '';
-                position: absolute;
-                inset: -2px;
-                border-radius: 100px;
-                background: linear-gradient(135deg, var(--gold), var(--gold-dark), var(--gold-light), var(--gold));
-                background-size: 300% 300%;
-                animation: border-shimmer 4s ease-in-out infinite;
-                z-index: -1;
-                opacity: 0;
-                transition: opacity 0.5s;
-            }
-
-            &::after {
-                content: '';
-                position: absolute;
-                inset: 1px;
-                background: var(--deep-blue);
-                border-radius: 100px;
-                z-index: -1;
-            }
-
-            &:hover {
-                transform: translateY(-3px) scale(1.02);
-                box-shadow:
-                    0 10px 40px rgba(212, 168, 83, 0.2),
-                    0 0 80px rgba(212, 168, 83, 0.1);
-                color: #fff;
-                border-color: var(--gold);
-
-                &::before { opacity: 1; }
-
-                & .play-icon {
-                    transform: scale(1.15);
-                }
-            }
-
-            & .play-icon {
-                width: 36px;
-                height: 36px;
-                background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: transform 0.3s;
-
-                & svg {
-                    width: 14px;
-                    height: 14px;
-                    margin-left: 2px;
-                }
-            }
-
-            & .link-text {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            & .link-label {
-                font-size: 0.65rem;
-                letter-spacing: 0.2em;
-                color: rgba(212, 168, 83, 0.6);
-                font-weight: 500;
-            }
-
-            & .link-title {
-                font-size: 1.1rem;
-                letter-spacing: 0.08em;
-            }
         }
+        .dotd-link::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark), var(--gold-light), var(--gold));
+            background-size: 300% 300%;
+            animation: border-shimmer 4s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .dotd-link::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: var(--deep-blue);
+            border-radius: 100px;
+            z-index: -1;
+        }
+        .dotd-link:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(212, 168, 83, 0.2), 0 0 80px rgba(212, 168, 83, 0.1);
+            color: #fff;
+            border-color: var(--gold);
+        }
+        .dotd-link:hover::before { opacity: 1; }
+        .dotd-link:hover .play-icon { transform: scale(1.15); }
+        .dotd-link .play-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        .dotd-link .play-icon svg { width: 14px; height: 14px; margin-left: 2px; }
+        .dotd-link .link-text { display: flex; flex-direction: column; align-items: flex-start; }
+        .dotd-link .link-label { font-size: 0.65rem; letter-spacing: 0.2em; color: rgba(212, 168, 83, 0.6); font-weight: 500; }
+        .dotd-link .link-title { font-size: 1.1rem; letter-spacing: 0.08em; }
 
         @keyframes border-shimmer {
             0%, 100% { background-position: 0% 50%; }
@@ -391,26 +363,21 @@
         }
 
         /* ── Section Titles ── */
-        /* Feature 1: Scroll-driven animation for section header */
-        .section-header {
-            text-align: center;
-            padding: 1.5rem 2rem 2rem;
-
-            & h2 {
-                font-family: 'Playfair Display', serif;
-                font-size: clamp(2rem, 4vw, 3rem);
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-                color: #fff;
-                animation: header-fade-in linear both;
-                animation-timeline: view();
-                animation-range: entry 0% entry 40%;
-            }
-
-            & p {
-                color: rgba(255, 255, 255, 0.4);
-                font-size: 0.9rem;
-                letter-spacing: 0.1em;
+        .section-header { text-align: center; padding: 1.5rem 2rem 2rem; }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .section-header p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+        @supports (animation-timeline: view()) {
+            .section-header h2, .section-header p {
                 animation: header-fade-in linear both;
                 animation-timeline: view();
                 animation-range: entry 0% entry 40%;
@@ -432,15 +399,13 @@
         /* ── Video Grid ── */
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
             gap: 2rem;
             padding: 0 2rem 4rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Feature 15: CSS nesting for video-card and children */
-        /* Feature 1: Scroll-driven fade-in for cards */
         .video-card {
             position: relative;
             border-radius: 16px;
@@ -450,93 +415,75 @@
             transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
                         border-color 0.5s cubic-bezier(0.23, 1, 0.32, 1),
                         box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            /* Feature 1: Scroll-driven animation replaces JS-based card-appear */
-            animation: card-scroll-in linear both;
-            animation-timeline: view();
-            animation-range: entry 0% entry 35%;
-            /* Feature 5: perspective for 3D tilt */
             transform-style: preserve-3d;
             will-change: transform;
-
-            &:hover {
-                border-color: rgba(212, 168, 83, 0.2);
-                box-shadow:
-                    0 20px 60px rgba(0, 0, 0, 0.3),
-                    0 0 40px rgba(212, 168, 83, 0.05);
+        }
+        @supports (animation-timeline: view()) {
+            .video-card {
+                animation: card-scroll-in linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 35%;
             }
-
-            & .thumb-wrapper {
-                position: relative;
-                aspect-ratio: 16/9;
-                overflow: hidden;
-                cursor: pointer;
-
-                & img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-                }
-
-                & .thumb-overlay {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    opacity: 0;
-                    transition: opacity 0.3s;
-                }
-            }
-
-            &:hover .thumb-wrapper img {
-                transform: scale(1.05);
-            }
-
-            &:hover .thumb-overlay {
-                opacity: 1;
-            }
-
-            &:hover .big-play {
-                transform: scale(1);
-            }
-
-            & .card-info {
-                padding: 1.2rem 1.5rem;
-                display: flex;
-                flex-wrap: wrap;
-                align-items: flex-start;
-                gap: 0.3rem;
-                position: relative;
-            }
-
-            & .card-title {
-                font-family: 'Space Grotesk', sans-serif;
-                font-weight: 600;
-                font-size: 1rem;
-                line-height: 1.4;
-                color: #fff;
-                margin-bottom: 0.5rem;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                flex: 1 1 100%;
-            }
-
-            & .card-date {
-                font-size: 0.8rem;
-                color: rgba(255, 255, 255, 0.35);
-                flex: 1 1 auto;
-            }
-
-            /* Feature 13: Keyboard focus ring */
-            &:focus-visible {
-                outline: 2px solid var(--gold);
-                outline-offset: 2px;
-                border-color: var(--gold);
-            }
+        }
+        .video-card:hover {
+            border-color: rgba(212, 168, 83, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(212, 168, 83, 0.05);
+        }
+        .video-card .thumb-wrapper {
+            position: relative;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .video-card .thumb-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .video-card .thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .video-card:hover .thumb-wrapper img { transform: scale(1.05); }
+        .video-card:hover .thumb-overlay { opacity: 1; }
+        .video-card:hover .big-play { transform: scale(1); }
+        .video-card .card-info {
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 0.3rem;
+            position: relative;
+        }
+        .video-card .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1 1 100%;
+        }
+        .video-card .card-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.35);
+            flex: 1 1 auto;
+        }
+        .video-card:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+            border-color: var(--gold);
         }
 
         /* Feature 1: scroll-driven card animation */
@@ -581,18 +528,9 @@
             flex-shrink: 0;
             margin-left: auto;
             align-self: center;
-
-            &:hover {
-                color: var(--gold);
-                border-color: var(--gold);
-                background: rgba(212, 168, 83, 0.1);
-            }
-
-            & svg {
-                width: 14px;
-                height: 14px;
-            }
         }
+        .share-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(212, 168, 83, 0.1); }
+        .share-btn svg { width: 14px; height: 14px; }
 
         /* Feature 7: Toast notification */
         .share-toast {
@@ -662,10 +600,6 @@
         .modal-backdrop.active {
             display: flex;
             opacity: 1;
-
-            @starting-style {
-                opacity: 0;
-            }
         }
 
         .modal-content {
@@ -682,11 +616,9 @@
             position: relative;
         }
 
-        .modal-backdrop.active .modal-content {
-            @starting-style {
-                transform: scale(0.85);
-                opacity: 0;
-            }
+        @starting-style {
+            .modal-backdrop.active { opacity: 0; }
+            .modal-backdrop.active .modal-content { transform: scale(0.85); opacity: 0; }
         }
 
         .modal-backdrop:not(.active) .modal-content {
@@ -717,17 +649,9 @@
             justify-content: center;
             z-index: 10;
             transition: all 0.3s;
-
-            &:hover {
-                background: rgba(212, 168, 83, 0.8);
-                border-color: var(--gold);
-            }
-
-            & svg {
-                width: 18px;
-                height: 18px;
-            }
         }
+        .pip-btn:hover { background: rgba(212, 168, 83, 0.8); border-color: var(--gold); }
+        .pip-btn svg { width: 18px; height: 18px; }
 
         .modal-close {
             position: fixed;
@@ -820,30 +744,24 @@
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             pointer-events: none;
-
-            &.visible {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-                pointer-events: auto;
-            }
-
-            & a {
-                color: rgba(255, 255, 255, 0.6);
-                text-decoration: none;
-                font-family: 'Space Grotesk', sans-serif;
-                font-size: 0.8rem;
-                font-weight: 500;
-                padding: 0.5rem 1.2rem;
-                border-radius: 100px;
-                transition: all 0.3s;
-                white-space: nowrap;
-
-                &:hover {
-                    color: var(--gold-light);
-                    background: rgba(212, 168, 83, 0.1);
-                }
-            }
         }
+        .floating-nav.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        .floating-nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: 100px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .floating-nav a:hover { color: var(--gold-light); background: rgba(212, 168, 83, 0.1); }
 
         /* ── Feature 11: Back-to-Top Button ── */
         .back-to-top {
@@ -866,26 +784,31 @@
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             pointer-events: none;
             box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
-
-            &.visible {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                pointer-events: auto;
-            }
-
-            &:hover {
-                transform: translateY(-3px) scale(1.1);
-                box-shadow: 0 8px 30px rgba(212, 168, 83, 0.5);
-            }
-
-            & svg {
-                width: 20px;
-                height: 20px;
-            }
         }
+        .back-to-top.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .back-to-top:hover { transform: translateY(-3px) scale(1.1); box-shadow: 0 8px 30px rgba(212, 168, 83, 0.5); }
+        .back-to-top svg { width: 20px; height: 20px; }
 
         /* ── Responsive ── */
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 3vh;
+                padding-left: 1rem;
+                padding-right: 1rem;
+                min-height: 90vh;
+            }
+
+            .family-crest {
+                width: clamp(220px, 70vw, 360px);
+                margin-bottom: 1.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 0.2em;
+                margin-bottom: 2rem;
+            }
+
             .video-grid {
                 grid-template-columns: 1fr;
                 padding: 0 1rem 3rem;
@@ -893,8 +816,9 @@
             }
 
             .dotd-link {
-                padding: 1rem 2rem;
-                font-size: 0.95rem;
+                padding: 1rem 1.5rem;
+                font-size: 0.85rem;
+                gap: 0.7rem;
             }
 
             .dotd-link .play-icon {
@@ -902,13 +826,105 @@
                 height: 30px;
             }
 
+            .dotd-link .link-title {
+                font-size: 0.95rem;
+            }
+
+            .dotd-link .link-label {
+                font-size: 0.6rem;
+            }
+
+            .scroll-indicator {
+                bottom: 1.5rem;
+            }
+
+            .section-header {
+                padding: 1rem 1rem 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .modal-backdrop {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                border-radius: 8px;
+            }
+
+            .modal-close {
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
             .floating-nav {
                 bottom: 1rem;
+                gap: 0.15rem;
+                padding: 0.35rem;
+            }
+
+            .floating-nav a {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
             }
 
             .back-to-top {
                 bottom: 4.5rem;
                 right: 1rem;
+                width: 38px;
+                height: 38px;
+            }
+
+            .cursor-glow {
+                display: none !important;
+            }
+
+            .thumb-overlay .big-play {
+                width: 48px;
+                height: 48px;
+            }
+
+            .big-play svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* Always show play button on mobile */
+            .video-card .thumb-overlay {
+                opacity: 1;
+                background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);
+            }
+
+            .video-card .big-play {
+                transform: scale(0.85);
+            }
+
+            .hero-particles {
+                display: none;
+            }
+
+            .video-card .card-info {
+                padding: 0.8rem 1rem;
+            }
+
+            .video-card .card-title {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .family-crest {
+                width: 200px;
+            }
+
+            .dotd-link {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.8rem;
             }
         }
 
@@ -1027,7 +1043,7 @@
 
     function resize() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.height = window.innerHeight || document.documentElement.clientHeight;
     }
 
     function initStars() {
@@ -1267,6 +1283,8 @@ const KNOWN_VIDEOS = [
     { videoId: 'SSYSC0_wdhQ', title: 'Crazy Bro Day - Tigers Baseball Game', published: '2018-09-01' },
 ];
 
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
 function fetchVideos() {
     allVideos = [...KNOWN_VIDEOS];
     renderNextBatch();
@@ -1353,20 +1371,22 @@ function renderNextBatch() {
             shareVideo(v.videoId, v.title);
         });
 
-        // Feature 5: 3D Card Tilt on Hover
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -5;
-            const rotateY = ((x - centerX) / centerX) * 5;
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-        });
+        // Feature 5: 3D Card Tilt on Hover (desktop only)
+        if (!isTouchDevice) {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        }
 
         grid.appendChild(card);
     }
