@@ -1319,16 +1319,16 @@ function renderNextBatch() {
             year: 'numeric', month: 'long', day: 'numeric'
         }) : '';
 
-        const thumbUrl = `https://img.youtube.com/vi/${v.videoId}/maxresdefault.jpg`;
-        const fallback1 = `https://img.youtube.com/vi/${v.videoId}/sddefault.jpg`;
-        const fallback2 = `https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg`;
+        // Some videos don't have maxresdefault; detect the grey placeholder by size
+        const thumbUrl = `https://img.youtube.com/vi/${v.videoId}/sddefault.jpg`;
+        const fallbackUrl = `https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg`;
 
         // Feature 12: skeleton + loaded image
         card.innerHTML = `
             <div class="thumb-wrapper" data-video-id="${v.videoId}">
                 <div class="skeleton-thumb" data-skeleton></div>
                 <img src="${thumbUrl}" alt="${v.title}" loading="lazy"
-                     onerror="if(this.src.includes('maxres')){this.src='${fallback1}'}else if(this.src.includes('sddefault')){this.src='${fallback2}'}"
+                     onerror="if(!this.src.includes('hqdefault')){this.src='${fallbackUrl}'}"
                      onload="var sk=this.parentElement.querySelector('[data-skeleton]');if(sk)sk.remove();"/>
                 <div class="thumb-overlay">
                     <div class="big-play">
