@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Benedict Family</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Feature 2: @property for animated gradients ── */
+        @property --aurora-color-1 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: rgba(79, 70, 229, 0.03);
+        }
+        @property --aurora-color-2 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: rgba(212, 168, 83, 0.04);
+        }
+        @property --aurora-color-3 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: rgba(59, 130, 246, 0.03);
+        }
+        @property --hero-grad-1 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: #d4a853;
+        }
+        @property --hero-grad-2 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: #f0d68a;
+        }
+        @property --hero-grad-3 {
+            syntax: '<color>';
+            inherits: false;
+            initial-value: #b8892e;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #d4a853;
+            --gold-light: #f0d68a;
+            --gold-dark: #b8892e;
+            --cream: #faf6ef;
+            --charcoal: #1a1a2e;
+            --deep-blue: #0f0f23;
+            --accent-blue: #4a90d9;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-blue);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ── Feature 10: text-wrap balance ── */
+        h1, h2, h3, h4, h5, h6, .card-title {
+            text-wrap: balance;
+        }
+
+        /* ── Feature 3: Scroll Progress Indicator ── */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            z-index: 2000;
+            background: transparent;
+            pointer-events: none;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            transition: width 0.1s linear;
+        }
+
+        /* ── Feature 6: Cursor Glow ── */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 168, 83, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+            display: none;
+        }
+
+        /* ── Animated Background ── */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(212, 168, 83, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Feature 2: Aurora with @property animated colors */
+        .aurora {
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background:
+                conic-gradient(from 0deg at 50% 50%,
+                    transparent 0deg,
+                    var(--aurora-color-1) 60deg,
+                    transparent 120deg,
+                    var(--aurora-color-2) 180deg,
+                    transparent 240deg,
+                    var(--aurora-color-3) 300deg,
+                    transparent 360deg);
+            animation: aurora-rotate 30s linear infinite, aurora-colors 8s ease-in-out infinite alternate;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes aurora-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes aurora-colors {
+            0% {
+                --aurora-color-1: rgba(79, 70, 229, 0.03);
+                --aurora-color-2: rgba(212, 168, 83, 0.04);
+                --aurora-color-3: rgba(59, 130, 246, 0.03);
+            }
+            33% {
+                --aurora-color-1: rgba(212, 168, 83, 0.05);
+                --aurora-color-2: rgba(59, 130, 246, 0.04);
+                --aurora-color-3: rgba(79, 70, 229, 0.04);
+            }
+            66% {
+                --aurora-color-1: rgba(59, 130, 246, 0.04);
+                --aurora-color-2: rgba(79, 70, 229, 0.05);
+                --aurora-color-3: rgba(212, 168, 83, 0.04);
+            }
+            100% {
+                --aurora-color-1: rgba(120, 80, 229, 0.04);
+                --aurora-color-2: rgba(240, 190, 83, 0.05);
+                --aurora-color-3: rgba(80, 150, 246, 0.04);
+            }
+        }
+
+        /* ── Content Layer ── */
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ── Hero Section ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 5vh;
+            text-align: center;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            position: relative;
+        }
+
+        .family-crest {
+            width: clamp(280px, 40vw, 480px);
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .family-crest img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Canvas-based shine rendered in JS */
+        .family-crest canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+            aspect-ratio: attr(width) / attr(height);
+        }
+
+        .hero .subtitle {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 3rem;
+        }
+
+        /* ── Dad of the Decade CTA ── (Feature 15: CSS nesting) */
+        .dotd-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, rgba(212, 168, 83, 0.15), rgba(212, 168, 83, 0.05));
+            border: 1px solid rgba(212, 168, 83, 0.3);
+            border-radius: 100px;
+            text-decoration: none;
+            color: var(--gold-light);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
+            cursor: pointer;
+
+            &::before {
+                content: '';
+                position: absolute;
+                inset: -2px;
+                border-radius: 100px;
+                background: linear-gradient(135deg, var(--gold), var(--gold-dark), var(--gold-light), var(--gold));
+                background-size: 300% 300%;
+                animation: border-shimmer 4s ease-in-out infinite;
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.5s;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 1px;
+                background: var(--deep-blue);
+                border-radius: 100px;
+                z-index: -1;
+            }
+
+            &:hover {
+                transform: translateY(-3px) scale(1.02);
+                box-shadow:
+                    0 10px 40px rgba(212, 168, 83, 0.2),
+                    0 0 80px rgba(212, 168, 83, 0.1);
+                color: #fff;
+                border-color: var(--gold);
+
+                &::before { opacity: 1; }
+
+                & .play-icon {
+                    transform: scale(1.15);
+                }
+            }
+
+            & .play-icon {
+                width: 36px;
+                height: 36px;
+                background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.3s;
+
+                & svg {
+                    width: 14px;
+                    height: 14px;
+                    margin-left: 2px;
+                }
+            }
+
+            & .link-text {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            & .link-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.2em;
+                color: rgba(212, 168, 83, 0.6);
+                font-weight: 500;
+            }
+
+            & .link-title {
+                font-size: 1.1rem;
+                letter-spacing: 0.08em;
+            }
+        }
+
+        @keyframes border-shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ── Floating particles behind hero ── */
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .hero-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-float linear infinite;
+        }
+
+        @keyframes particle-float {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-20vh) scale(1); }
+        }
+
+        /* ── Scroll Indicator ── */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: fade-bounce 3s ease-in-out infinite;
+        }
+
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 38px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator .mouse::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 8px;
+            background: rgba(212, 168, 83, 0.6);
+            border-radius: 2px;
+            animation: scroll-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-dot {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes fade-bounce {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(5px); }
+        }
+
+        /* ── Section Titles ── */
+        /* Feature 1: Scroll-driven animation for section header */
+        .section-header {
+            text-align: center;
+            padding: 1.5rem 2rem 2rem;
+
+            & h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: clamp(2rem, 4vw, 3rem);
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+                color: #fff;
+                animation: header-fade-in linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 40%;
+            }
+
+            & p {
+                color: rgba(255, 255, 255, 0.4);
+                font-size: 0.9rem;
+                letter-spacing: 0.1em;
+                animation: header-fade-in linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 40%;
+            }
+        }
+
+        @keyframes header-fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1.5rem auto 0;
+        }
+
+        /* ── Video Grid ── */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Feature 15: CSS nesting for video-card and children */
+        /* Feature 1: Scroll-driven fade-in for cards */
+        .video-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                        border-color 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                        box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            /* Feature 1: Scroll-driven animation replaces JS-based card-appear */
+            animation: card-scroll-in linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 35%;
+            /* Feature 5: perspective for 3D tilt */
+            transform-style: preserve-3d;
+            will-change: transform;
+
+            &:hover {
+                border-color: rgba(212, 168, 83, 0.2);
+                box-shadow:
+                    0 20px 60px rgba(0, 0, 0, 0.3),
+                    0 0 40px rgba(212, 168, 83, 0.05);
+            }
+
+            & .thumb-wrapper {
+                position: relative;
+                aspect-ratio: 16/9;
+                overflow: hidden;
+                cursor: pointer;
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+                }
+
+                & .thumb-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                }
+            }
+
+            &:hover .thumb-wrapper img {
+                transform: scale(1.05);
+            }
+
+            &:hover .thumb-overlay {
+                opacity: 1;
+            }
+
+            &:hover .big-play {
+                transform: scale(1);
+            }
+
+            & .card-info {
+                padding: 1.2rem 1.5rem;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                gap: 0.3rem;
+                position: relative;
+            }
+
+            & .card-title {
+                font-family: 'Space Grotesk', sans-serif;
+                font-weight: 600;
+                font-size: 1rem;
+                line-height: 1.4;
+                color: #fff;
+                margin-bottom: 0.5rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                flex: 1 1 100%;
+            }
+
+            & .card-date {
+                font-size: 0.8rem;
+                color: rgba(255, 255, 255, 0.35);
+                flex: 1 1 auto;
+            }
+
+            /* Feature 13: Keyboard focus ring */
+            &:focus-visible {
+                outline: 2px solid var(--gold);
+                outline-offset: 2px;
+                border-color: var(--gold);
+            }
+        }
+
+        /* Feature 1: scroll-driven card animation */
+        @keyframes card-scroll-in {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .thumb-overlay .big-play {
+            width: 64px;
+            height: 64px;
+            background: rgba(212, 168, 83, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(212, 168, 83, 0.4);
+        }
+
+        .big-play svg {
+            width: 24px;
+            height: 24px;
+            margin-left: 3px;
+            fill: var(--deep-blue);
+        }
+
+        /* ── Feature 7: Share Button ── */
+        .share-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+            flex-shrink: 0;
+            margin-left: auto;
+            align-self: center;
+
+            &:hover {
+                color: var(--gold);
+                border-color: var(--gold);
+                background: rgba(212, 168, 83, 0.1);
+            }
+
+            & svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        /* Feature 7: Toast notification */
+        .share-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--gold);
+            color: var(--deep-blue);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 100px;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .share-toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Feature 12: Skeleton Loading ── */
+        .skeleton-thumb {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+        .skeleton-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.04) 40%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.04) 60%,
+                transparent 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ── Video Modal ── */
+        /* Feature 9: View Transition-style modal with @starting-style */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.4s ease, display 0.4s ease allow-discrete;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+            opacity: 1;
+
+            @starting-style {
+                opacity: 0;
+            }
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 1100px;
+            aspect-ratio: 16/9;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+            cursor: default;
+            transform: scale(1);
+            opacity: 1;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
+            position: relative;
+        }
+
+        .modal-backdrop.active .modal-content {
+            @starting-style {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+        }
+
+        .modal-backdrop:not(.active) .modal-content {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Feature 8: PiP button */
+        .pip-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s;
+
+            &:hover {
+                background: rgba(212, 168, 83, 0.8);
+                border-color: var(--gold);
+            }
+
+            & svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        .modal-close {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* ── Loading Spinner ── */
+        .loading-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 2rem 5rem;
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 168, 83, 0.1);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+        }
+
+        .loading-section.hidden { display: none; }
+
+        .end-message {
+            text-align: center;
+            padding: 3rem 2rem 5rem;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            display: none;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ── Feature 4: Glassmorphism Floating Nav ── */
+        .floating-nav {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            display: flex;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            background: rgba(15, 15, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 168, 83, 0.15);
+            border-radius: 100px;
+            z-index: 900;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+
+            &.visible {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+                pointer-events: auto;
+            }
+
+            & a {
+                color: rgba(255, 255, 255, 0.6);
+                text-decoration: none;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 0.8rem;
+                font-weight: 500;
+                padding: 0.5rem 1.2rem;
+                border-radius: 100px;
+                transition: all 0.3s;
+                white-space: nowrap;
+
+                &:hover {
+                    color: var(--gold-light);
+                    background: rgba(212, 168, 83, 0.1);
+                }
+            }
+        }
+
+        /* ── Feature 11: Back-to-Top Button ── */
+        .back-to-top {
+            position: fixed;
+            bottom: 5.5rem;
+            right: 2rem;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none;
+            border-radius: 50%;
+            color: var(--deep-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 900;
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
+
+            &.visible {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                pointer-events: auto;
+            }
+
+            &:hover {
+                transform: translateY(-3px) scale(1.1);
+                box-shadow: 0 8px 30px rgba(212, 168, 83, 0.5);
+            }
+
+            & svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem 3rem;
+                gap: 1.5rem;
+            }
+
+            .dotd-link {
+                padding: 1rem 2rem;
+                font-size: 0.95rem;
+            }
+
+            .dotd-link .play-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .floating-nav {
+                bottom: 1rem;
+            }
+
+            .back-to-top {
+                bottom: 4.5rem;
+                right: 1rem;
+            }
+        }
+
+        /* ── Fallback for browsers without scroll-driven animations ── */
+        @supports not (animation-timeline: view()) {
+            .video-card {
+                opacity: 0;
+                transform: translateY(40px);
+                animation: card-appear 0.8s forwards;
+            }
+            @keyframes card-appear {
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .section-header h2,
+            .section-header p {
+                animation: none;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Feature 3: Scroll Progress Bar -->
+<div class="scroll-progress"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
+
+<!-- Feature 6: Cursor Glow -->
+<div class="cursor-glow" id="cursor-glow"></div>
+
+<!-- Animated Background -->
+<canvas id="bg-canvas"></canvas>
+<div class="gradient-overlay"></div>
+<div class="aurora"></div>
+
+<div class="content">
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-particles" id="hero-particles"></div>
+
+        <div class="family-crest">
+            <img src="logo.png" alt="House of Benedict" />
+            <canvas id="shine-canvas"></canvas>
+        </div>
+
+        <p class="subtitle">Our Family Story</p>
+
+        <a href="https://www.youtube.com/@DadoftheDecade" target="_blank" rel="noopener" class="dotd-link">
+            <span class="play-icon">
+                <svg viewBox="0 0 24 24" fill="var(--deep-blue)">
+                    <polygon points="8,5 20,12 8,19"/>
+                </svg>
+            </span>
+            <span class="link-text">
+                <span class="link-label">Watch on YouTube</span>
+                <span class="link-title">Dad of the Decade</span>
+            </span>
+        </a>
+
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Videos -->
+    <div class="section-header" id="section-header">
+        <h2>Latest Adventures</h2>
+        <p>Family moments worth sharing</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="video-grid" id="video-grid"></div>
+
+    <div class="loading-section" id="loading">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading more memories...</span>
+    </div>
+
+    <div class="end-message" id="end-message">You've seen all the adventures — for now.</div>
+
+    <footer>&copy; 2026 The Benedict Family</footer>
+</div>
+
+<!-- Video Modal -->
+<div class="modal-backdrop" id="modal">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <div class="modal-content" id="modal-content"></div>
+</div>
+
+<!-- Feature 4: Floating Nav -->
+<nav class="floating-nav" id="floating-nav">
+    <a href="#hero">Home</a>
+    <a href="#video-grid">Videos</a>
+    <a href="https://www.youtube.com/@DadoftheDecade" target="_blank" rel="noopener">YouTube</a>
+</nav>
+
+<!-- Feature 11: Back-to-Top -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
+
+<!-- Feature 7: Share Toast -->
+<div class="share-toast" id="share-toast">Copied!</div>
+
+<script>
+// ── Starfield Background with Feature 14: Parallax ──
+(function() {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const STAR_COUNT = 200;
+    let scrollOffset = 0;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.5 + 0.3,
+                alpha: Math.random() * 0.5 + 0.1,
+                pulse: Math.random() * 0.02 + 0.005,
+                phase: Math.random() * Math.PI * 2,
+                depth: Math.random() * 0.5 + 0.5 // Feature 14: parallax depth
+            });
+        }
+    }
+
+    // Feature 14: Track scroll for parallax
+    window.addEventListener('scroll', () => {
+        scrollOffset = window.scrollY;
+    }, { passive: true });
+
+    let time = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        time += 0.01;
+
+        stars.forEach(s => {
+            const a = s.alpha + Math.sin(time * 2 + s.phase) * s.pulse * 10;
+            // Feature 14: offset star positions by scroll * depth factor
+            const parallaxY = (s.y - scrollOffset * s.depth * 0.05) % canvas.height;
+            const drawY = parallaxY < 0 ? parallaxY + canvas.height : parallaxY;
+            ctx.beginPath();
+            ctx.arc(s.x, drawY, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 190, 140, ${Math.max(0, a)})`;
+            ctx.fill();
+        });
+
+        // Occasional shooting star
+        if (Math.random() < 0.003) {
+            const sx = Math.random() * canvas.width;
+            const sy = Math.random() * canvas.height * 0.5;
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + 80, sy + 30);
+            ctx.strokeStyle = 'rgba(212, 168, 83, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); initStars(); });
+    resize();
+    initStars();
+    draw();
+})();
+
+// ── Hero Particles ──
+(function() {
+    const container = document.getElementById('hero-particles');
+    for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'hero-particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
+        container.appendChild(p);
+    }
+})();
+
+// ── Logo Shine Effect ──
+(function() {
+    const img = document.querySelector('.family-crest img');
+    const canvas = document.getElementById('shine-canvas');
+    const ctx = canvas.getContext('2d');
+
+    img.addEventListener('load', () => {
+        const rect = img.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.scale(dpr, dpr);
+
+        const drawW = rect.width;
+        const drawH = rect.height;
+
+        let shineX = -0.4;
+        let sweeping = false;
+        let idleTimer = 0;
+        const IDLE_FRAMES = 300;
+        const SWEEP_SPEED = 0.02;
+
+        function drawShine() {
+            ctx.clearRect(0, 0, drawW, drawH);
+
+            if (!sweeping) {
+                idleTimer++;
+                if (idleTimer >= IDLE_FRAMES) {
+                    sweeping = true;
+                    shineX = -0.4;
+                    idleTimer = 0;
+                }
+                requestAnimationFrame(drawShine);
+                return;
+            }
+
+            const cx = shineX * (drawW + drawH * 0.6);
+            const bandWidth = drawW * 0.22;
+
+            ctx.save();
+            ctx.translate(cx, 0);
+            ctx.rotate(0.35);
+
+            const grad = ctx.createLinearGradient(-bandWidth, 0, bandWidth, 0);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+            grad.addColorStop(0.25, 'rgba(255, 248, 210, 0.2)');
+            grad.addColorStop(0.45, 'rgba(255, 255, 240, 0.5)');
+            grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.7)');
+            grad.addColorStop(0.55, 'rgba(255, 255, 240, 0.5)');
+            grad.addColorStop(0.75, 'rgba(255, 248, 210, 0.2)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(-bandWidth, -drawH, bandWidth * 2, drawH * 3);
+            ctx.restore();
+
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.drawImage(img, 0, 0, drawW, drawH);
+            ctx.globalCompositeOperation = 'source-over';
+
+            shineX += SWEEP_SPEED;
+            if (shineX > 1.5) {
+                sweeping = false;
+            }
+
+            requestAnimationFrame(drawShine);
+        }
+
+        drawShine();
+    });
+
+    if (img.complete) img.dispatchEvent(new Event('load'));
+})();
+
+// ── Feature 6: Cursor Glow ──
+(function() {
+    const glow = document.getElementById('cursor-glow');
+    let glowVisible = false;
+    document.addEventListener('mousemove', (e) => {
+        if (!glowVisible) { glow.style.display = 'block'; glowVisible = true; }
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+    });
+    // Hide on touch devices
+    document.addEventListener('touchstart', () => { glow.style.display = 'none'; }, { once: true });
+})();
+
+// ── Feature 3: Scroll Progress ──
+// ── Feature 4: Floating Nav show/hide ──
+// ── Feature 11: Back-to-Top show/hide ──
+(function() {
+    const progressBar = document.getElementById('scroll-progress-bar');
+    const floatingNav = document.getElementById('floating-nav');
+    const backToTop = document.getElementById('back-to-top');
+    const hero = document.getElementById('hero');
+
+    function onScroll() {
+        // Progress bar
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+
+        // Show/hide nav and back-to-top after hero
+        const heroBottom = hero.offsetTop + hero.offsetHeight;
+        const pastHero = scrollTop > heroBottom * 0.7;
+        floatingNav.classList.toggle('visible', pastHero);
+        backToTop.classList.toggle('visible', pastHero);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Feature 11: Back-to-top click
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+})();
+
+// ── YouTube Video Loading ──
+const CHANNEL_ID = 'UCxWHVMzGKMIBj8seXV5UbPw';
+const UPLOADS_PLAYLIST = 'UUxWHVMzGKMIBj8seXV5UbPw';
+const VIDEOS_PER_PAGE = 6;
+let allVideos = [];
+let displayedCount = 0;
+let isLoading = false;
+let allLoaded = false;
+let rssLoaded = false;
+
+const KNOWN_VIDEOS = [
+    { videoId: 'yuWnvlRrlzY', title: 'Bluebird Days, Fast Runs & Late Nights | Tahoe 2026', published: '2026-03-02' },
+    { videoId: 'ie-Z2NVl90o', title: 'Mazey Jane - The First Two Years', published: '2025-12-08' },
+    { videoId: 'kRMOGlwUz8g', title: 'Exploring Grand Rapids Like Tourists (With Kids!)', published: '2025-11-28' },
+    { videoId: 'bIseh0lzG2Q', title: "Grandma's Epic 70th Birthday Bash! Helicopter Surprise, Pumpkin Heads & Jack's First Touchdown!", published: '2025-10-12' },
+    { videoId: 'Ye3_kajUJAw', title: 'Family Adventure in Michigan! Lake Michigan Fishing, UP Zip Lining & Mackinac Island', published: '2025-08-25' },
+    { videoId: 'oJ4zSd9V8oM', title: 'The Boys hunt for Pennywise!', published: '2025-08-25' },
+    { videoId: '-rrWpl2AyUM', title: 'StumpFest 2025: Record-Breaking Fun, Epic Games & a Surprise Visit from Stumpy!', published: '2025-08-15' },
+    { videoId: 'SjTgU4OYRHM', title: 'Florida Family Adventure! Airboats, Jet Skis, Shark Fishing & Coconut Water Anthems!', published: '2025-04-14' },
+    { videoId: 'bSb-vLVP4cQ', title: 'VIP Basketball Weekend! All-Access Pass, Jumbotron Moments & Liquid Nitrogen Fun', published: '2025-03-07' },
+    { videoId: 'lEsE73X2wSw', title: "Jack's 7th Birthday Bash - Costumes, Contests & a Crazy Pool Party!", published: '2025-02-23' },
+    { videoId: '5RVrxRoE4O4', title: "Mazey's First Daddy-Daughter Dance - A Night of Magic & Memories!", published: '2025-02-23' },
+    { videoId: '01xYj2tEWss', title: 'Daddy-Daughter Dance 2025 - A Night to Remember!', published: '2025-02-16' },
+    { videoId: 'ZmpwePBux6E', title: 'Epic Atlanta Brocation: Graffiti, Lil Wayne, and Family Fun!', published: '2025-01-22' },
+    { videoId: 'G5NxeDpM5u8', title: 'Epic Family Adventure in Dallas & Fort Worth: Zoos, Rodeos, Skydiving & More!', published: '2024-11-25' },
+    { videoId: 'L3qDJxpV1WY', title: "Victoria's Enchanted 3rd Birthday: Flowers, Fairy Tales, and Dancing", published: '2024-09-08' },
+    { videoId: '-sUTjFVFJYQ', title: 'Epic Father-Sons Adventure: Manistee & Silver Lake Sand Dunes - Unforgettable 3-Day Trip!', published: '2024-08-01' },
+    { videoId: 'zvzgcN-PV4M', title: 'StumpFest 2024: Ultimate Family Fun Day with Games, Prizes, and River Adventures!', published: '2024-07-15' },
+    { videoId: 'wLqgIMoppx0', title: 'Ultimate Brocation: Everglades Adventure, InterMiami Thrills, Tuna Fishing & More in Ft. Lauderdale!', published: '2024-06-01' },
+    { videoId: 'lL3UY1flJX0', title: 'Magical Daddy Daughter Dance 2024: Princesses, Face Painting & More at Cascade Hills!', published: '2024-04-01' },
+    { videoId: 'oVsruZnyf4Q', title: 'Maldives Magic: Diving Deep, Riding Waves and Relaxing', published: '2024-03-01' },
+    { videoId: 'L8rdoz3dGVs', title: 'Ultimate Thrills Montage: Luxe Adventures & High-Octane Moments', published: '2024-02-15' },
+    { videoId: '63EdCc5kxiw', title: 'Epic Dubai Adventure: Luxury, Heights & Unforgettable Memories | January 2024', published: '2024-02-01' },
+    { videoId: 'WmenexNf_7A', title: 'Florida Splashes & Smiles: Our Rainy November 2023 Family Adventure | Disney, Discovery Cove & More!', published: '2023-12-01' },
+    { videoId: 'fRrgRUue36g', title: 'StumpFest 2023', published: '2023-08-01' },
+    { videoId: 'maATN1YUrB0', title: 'We Bought a House - And Destroyed It! 2020', published: '2021-01-01' },
+    { videoId: 'iK9yjX_QkTI', title: 'Jack Turns 2', published: '2020-10-01' },
+    { videoId: 'nGl_OZKjc9E', title: 'Benedicts head to Wisconsin Dells, Medieval Times, Shedd & Chicago 2019', published: '2020-06-01' },
+    { videoId: 'bsMox0DrfJo', title: 'Benedict Family Trip to Orlando - Disney 2020', published: '2020-03-01' },
+    { videoId: 'U1rgPGRmXYk', title: "Stumpfest 2019, Glamping, Riverside and Nana's Birthday", published: '2019-09-01' },
+    { videoId: 'GHYyRtdJLmM', title: 'Boulder Ridge Wild Animal Park with Dominic', published: '2019-06-01' },
+    { videoId: 'ORcVuVdZqdg', title: 'Whitney turns 40 in Phoenix, AZ', published: '2019-03-01' },
+    { videoId: 'SSYSC0_wdhQ', title: 'Crazy Bro Day - Tigers Baseball Game', published: '2018-09-01' },
+];
+
+function fetchVideos() {
+    allVideos = [...KNOWN_VIDEOS];
+    renderNextBatch();
+}
+
+// ── Feature 7: Share function ──
+function shareVideo(videoId, title) {
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Link copied!');
+        }).catch(() => {
+            // Fallback for older browsers
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Link copied!');
+        });
+    }
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('share-toast');
+    toast.textContent = msg;
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 2000);
+}
+
+function renderNextBatch() {
+    const grid = document.getElementById('video-grid');
+    const end = Math.min(displayedCount + VIDEOS_PER_PAGE, allVideos.length);
+
+    for (let i = displayedCount; i < end; i++) {
+        const v = allVideos[i];
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        // Feature 13: Make cards focusable for keyboard nav
+        card.setAttribute('tabindex', '0');
+        card.dataset.videoId = v.videoId;
+        card.dataset.index = i;
+
+        const dateStr = v.published ? new Date(v.published).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        }) : '';
+
+        const thumbUrl = `https://img.youtube.com/vi/${v.videoId}/maxresdefault.jpg`;
+        const fallback1 = `https://img.youtube.com/vi/${v.videoId}/sddefault.jpg`;
+        const fallback2 = `https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg`;
+
+        // Feature 12: skeleton + loaded image
+        card.innerHTML = `
+            <div class="thumb-wrapper" data-video-id="${v.videoId}">
+                <div class="skeleton-thumb" data-skeleton></div>
+                <img src="${thumbUrl}" alt="${v.title}" loading="lazy"
+                     onerror="if(this.src.includes('maxres')){this.src='${fallback1}'}else if(this.src.includes('sddefault')){this.src='${fallback2}'}"
+                     onload="var sk=this.parentElement.querySelector('[data-skeleton]');if(sk)sk.remove();"/>
+                <div class="thumb-overlay">
+                    <div class="big-play">
+                        <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="card-info">
+                <div class="card-title">${v.title}</div>
+                ${dateStr ? `<div class="card-date">${dateStr}</div>` : ''}
+                <button class="share-btn" title="Share" data-share-id="${v.videoId}" data-share-title="${v.title.replace(/"/g, '&quot;')}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        card.querySelector('.thumb-wrapper').addEventListener('click', () => openModal(v.videoId));
+        // Feature 7: Share click
+        card.querySelector('.share-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            shareVideo(v.videoId, v.title);
+        });
+
+        // Feature 5: 3D Card Tilt on Hover
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5;
+            const rotateY = ((x - centerX) / centerX) * 5;
+            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+
+        grid.appendChild(card);
+    }
+
+    displayedCount = end;
+    isLoading = false;
+
+    if (displayedCount >= allVideos.length) {
+        allLoaded = true;
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('end-message').style.display = 'block';
+    }
+}
+
+// ── Feature 13: Keyboard Navigation ──
+(function() {
+    document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('modal');
+        if (modal.classList.contains('active')) return; // Don't navigate cards when modal open
+
+        const cards = Array.from(document.querySelectorAll('.video-card'));
+        if (!cards.length) return;
+
+        const focused = document.activeElement;
+        const currentIndex = cards.indexOf(focused);
+
+        if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(e.key)) {
+            e.preventDefault();
+            let nextIndex;
+            if (currentIndex === -1) {
+                nextIndex = 0;
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                nextIndex = Math.min(currentIndex + 1, cards.length - 1);
+            } else {
+                nextIndex = Math.max(currentIndex - 1, 0);
+            }
+            cards[nextIndex].focus();
+            cards[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        if (e.key === 'Enter' && currentIndex !== -1) {
+            const videoId = cards[currentIndex].dataset.videoId;
+            if (videoId) openModal(videoId);
+        }
+    });
+})();
+
+// ── Modal ──
+function openModal(videoId) {
+    const modal = document.getElementById('modal');
+    const content = document.getElementById('modal-content');
+    content.innerHTML = `<iframe id="modal-iframe" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
+                          allow="autoplay; fullscreen" allowfullscreen></iframe>
+                          <button class="pip-btn" id="pip-btn" title="Picture-in-Picture">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <rect x="2" y="3" width="20" height="14" rx="2"/><rect x="12" y="10" width="8" height="6" rx="1"/>
+                              </svg>
+                          </button>`;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Feature 8: PiP button
+    document.getElementById('pip-btn').addEventListener('click', () => {
+        const iframe = document.getElementById('modal-iframe');
+        // PiP API works on video elements; for iframes we use documentPiP if available
+        if ('documentPictureInPicture' in window) {
+            documentPictureInPicture.requestWindow({ width: 640, height: 360 }).then((pipWindow) => {
+                const pipIframe = pipWindow.document.createElement('iframe');
+                pipIframe.src = iframe.src;
+                pipIframe.style.cssText = 'width:100%;height:100%;border:none;';
+                pipWindow.document.body.style.margin = '0';
+                pipWindow.document.body.appendChild(pipIframe);
+                closeModal();
+            }).catch(() => {
+                showToast('PiP not available for this content');
+            });
+        } else {
+            showToast('PiP not supported in this browser');
+        }
+    });
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal');
+    // Trigger close transition
+    modal.style.opacity = '0';
+    modal.querySelector('.modal-content').style.transform = 'scale(0.9)';
+    modal.querySelector('.modal-content').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('modal-content').innerHTML = '';
+        modal.classList.remove('active');
+        modal.style.opacity = '';
+        document.body.style.overflow = '';
+    }, 350);
+}
+
+document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+});
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// ── Infinite Scroll ──
+const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !isLoading && !allLoaded) {
+        isLoading = true;
+        setTimeout(() => renderNextBatch(), 600);
+    }
+}, { rootMargin: '200px' });
+
+observer.observe(document.getElementById('loading'));
+
+// ── Init ──
+fetchVideos();
+</script>
+
+</body>
+</html>
