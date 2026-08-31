@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+
+repository_base="https://raw.githubusercontent.com/GrantFinale/benedict-family/main"
+site_root="/var/www/benedict.family"
+staging_dir="$(mktemp -d /tmp/benedict-family-deploy.XXXXXX)"
+
+cleanup() {
+    rm -rf "$staging_dir"
+}
+trap cleanup EXIT INT TERM
+
+curl --fail --silent --show-error --location \
+    "$repository_base/index.html" --output "$staging_dir/index.html"
+curl --fail --silent --show-error --location \
+    "$repository_base/videos.json" --output "$staging_dir/videos.json"
+curl --fail --silent --show-error --location \
+    "$repository_base/logo.png" --output "$staging_dir/logo.png"
+
+grep -q '<title>The Benedict Family</title>' "$staging_dir/index.html"
+grep -q '"videoId"' "$staging_dir/videos.json"
+test -s "$staging_dir/logo.png"
+
+install -o root -g root -m 0644 "$staging_dir/index.html" "$site_root/index.html"
+install -o root -g root -m 0644 "$staging_dir/videos.json" "$site_root/videos.json"
+install -o root -g root -m 0644 "$staging_dir/logo.png" "$site_root/logo.png"
