@@ -217,7 +217,89 @@
             letter-spacing: 0.3em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ── Family Story ── */
+        .family-story {
+            width: min(1180px, 100%);
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+            align-items: stretch;
+            text-align: left;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+            border: 1px solid rgba(212, 168, 83, 0.18);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .family-story-image {
+            min-height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .family-story-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 70%, rgba(15, 15, 35, 0.28));
+            pointer-events: none;
+        }
+
+        .family-story-image img {
+            width: 100%;
+            height: 100%;
+            min-height: 680px;
+            display: block;
+            object-fit: cover;
+            object-position: 50% 50%;
+        }
+
+        .family-story-copy {
+            padding: clamp(2rem, 4vw, 4.5rem);
+            align-self: center;
+        }
+
+        .family-story-copy h1 {
+            margin-bottom: 1.75rem;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 4vw, 4.25rem);
+            line-height: 1;
+            color: var(--gold-light);
+        }
+
+        .family-story-copy p {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+            line-height: 1.75;
+        }
+
+        .family-story-copy .story-lead {
+            color: rgba(255, 255, 255, 0.92);
+            font-size: clamp(1rem, 1.4vw, 1.16rem);
+        }
+
+        .family-story-copy .story-philosophy {
+            margin: 1.75rem 0;
+            padding: 1.25rem 1.5rem;
+            border-left: 3px solid var(--gold);
+            background: rgba(212, 168, 83, 0.07);
+            color: var(--gold-light);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .family-story-copy .story-ending {
+            margin: 1.5rem 0 0;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2vw, 1.65rem);
+            line-height: 1.45;
         }
 
         /* ── Dad of the Decade CTA ── */
@@ -693,11 +775,17 @@
 
         .end-message {
             text-align: center;
-            padding: 3rem 2rem 5rem;
+            padding: 3rem 2rem;
             color: rgba(255, 255, 255, 0.25);
             font-size: 0.85rem;
             letter-spacing: 0.1em;
             display: none;
+        }
+
+        .youtube-cta {
+            display: flex;
+            justify-content: center;
+            padding: 0 2rem 5rem;
         }
 
         /* ── Footer ── */
@@ -780,6 +868,32 @@
                 padding-left: 1rem;
                 padding-right: 1rem;
                 min-height: 90vh;
+            }
+
+            .family-story {
+                grid-template-columns: 1fr;
+                border-radius: 20px;
+            }
+
+            .family-story-image img {
+                min-height: 0;
+                aspect-ratio: 4 / 3;
+            }
+
+            .family-story-image::after {
+                background: linear-gradient(180deg, transparent 75%, rgba(15, 15, 35, 0.3));
+            }
+
+            .family-story-copy {
+                padding: 2rem 1.4rem 2.25rem;
+            }
+
+            .family-story-copy h1 {
+                margin-bottom: 1.4rem;
+            }
+
+            .family-story-copy p {
+                line-height: 1.65;
             }
 
             .family-crest {
@@ -954,19 +1068,28 @@
             <canvas id="shine-canvas"></canvas>
         </div>
 
-        <p class="subtitle">Our Family Story</p>
+        <p class="subtitle">Est. 2013</p>
 
-        <a href="https://www.youtube.com/@DadoftheDecade" target="_blank" rel="noopener" class="dotd-link">
-            <span class="play-icon">
-                <svg viewBox="0 0 24 24" fill="var(--deep-blue)">
-                    <polygon points="8,5 20,12 8,19"/>
-                </svg>
-            </span>
-            <span class="link-text">
-                <span class="link-label">Watch on YouTube</span>
-                <span class="link-title">Dad of the Decade</span>
-            </span>
-        </a>
+        <article class="family-story">
+            <figure class="family-story-image">
+                <img src="family-story.jpg" alt="The Benedict family together in a garden" />
+            </figure>
+            <div class="family-story-copy">
+                <h1>Our Family Story</h1>
+                <p class="story-lead">Our story technically began at Forest Hills Central High School, where we both graduated in 2001. We walked the same halls, knew many of the same people, and somehow managed to completely miss the fact that we were supposed to spend our lives together.</p>
+                <p>Apparently, we needed a decade to figure that out.</p>
+                <p>During those ten years, Whitney headed to Grand Valley State University, where she earned her degree in business and began building her career. Max went to Michigan State University, earned his degree in finance, and started down his own career path.</p>
+                <p>Then, in 2011, our paths crossed again at The Winchester in Grand Rapids. This time, things went a little differently.</p>
+                <p>We hit it off immediately. Having already wasted ten perfectly good years, we decided there was no reason to waste any more. We fell in love, traveled every chance we got, started building a life together, and before long, we were engaged.</p>
+                <p>In November 2013, we got married. Naturally, we continued our tradition of wasting absolutely no time.</p>
+                <p>Jack arrived in October 2014, followed by Dominic, then Mazey, and finally Victoria, completing our family of six.</p>
+                <p>Somewhere along the way, the relatively quiet lives of two young professionals were replaced by a house overflowing with kids, adventures, family trips, birthday parties, ridiculous traditions, big ideas, louder-than-necessary celebrations, and a level of organized chaos we never could have imagined back in 2001.</p>
+                <p>And we wouldn't have it any other way.</p>
+                <p class="story-philosophy">Our family philosophy is pretty simple: <strong>go places, do things, make memories, have fun, and make childhood something worth remembering.</strong></p>
+                <p>Our house may be louder, our vacations may require significantly more luggage, and getting six people out the door may occasionally qualify as an Olympic event, but our home has ultimately become exactly what we hoped it would be:</p>
+                <p class="story-ending"><strong>Full of love. Full of laughter.<br>And just the right amount of chaos.</strong></p>
+            </div>
+        </article>
 
         <div class="scroll-indicator">
             <div class="mouse"></div>
@@ -989,6 +1112,20 @@
     </div>
 
     <div class="end-message" id="end-message">You've seen all the adventures — for now.</div>
+
+    <div class="youtube-cta">
+        <a href="https://www.youtube.com/@DadoftheDecade" target="_blank" rel="noopener" class="dotd-link">
+            <span class="play-icon">
+                <svg viewBox="0 0 24 24" fill="var(--deep-blue)">
+                    <polygon points="8,5 20,12 8,19"/>
+                </svg>
+            </span>
+            <span class="link-text">
+                <span class="link-label">Watch on YouTube</span>
+                <span class="link-title">Dad of the Decade</span>
+            </span>
+        </a>
+    </div>
 
     <footer>&copy; 2026 The Benedict Family</footer>
 </div>
