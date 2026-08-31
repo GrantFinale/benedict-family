@@ -1230,7 +1230,7 @@ let allVideos = [];
 let displayedCount = 0;
 let isLoading = false;
 let allLoaded = false;
-let rssLoaded = false;
+const VIDEO_FEED_URL = 'videos.json';
 
 const KNOWN_VIDEOS = [
     { videoId: 'yuWnvlRrlzY', title: 'Bluebird Days, Fast Runs & Late Nights | Tahoe 2026', published: '2026-03-02' },
@@ -1269,9 +1269,36 @@ const KNOWN_VIDEOS = [
 
 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-function fetchVideos() {
-    allVideos = [...KNOWN_VIDEOS];
+async function fetchVideos() {
+    let syncedVideos = [];
+
+    try {
+        const response = await fetch(VIDEO_FEED_URL, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`Video feed returned ${response.status}`);
+        syncedVideos = await response.json();
+    } catch (error) {
+        console.warn('Using the built-in video catalog because the synced feed is unavailable.', error);
+    }
+
+    // The generated feed contains recent uploads; KNOWN_VIDEOS preserves the full archive.
+    // A Map removes duplicates while keeping the freshly synced title and date.
+    const videosById = new Map();
+    [...syncedVideos, ...KNOWN_VIDEOS].forEach(video => {
+        if (video && video.videoId && !videosById.has(video.videoId)) {
+            videosById.set(video.videoId, video);
+        }
+    });
+
+    allVideos = Array.from(videosById.values()).sort((a, b) =>
+        new Date(b.published || 0) - new Date(a.published || 0)
+    );
     renderNextBatch();
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    })[character]);
 }
 
 // ── Feature 7: Share function ──
@@ -1308,6 +1335,7 @@ function renderNextBatch() {
 
     for (let i = displayedCount; i < end; i++) {
         const v = allVideos[i];
+        const safeTitle = escapeHtml(v.title);
         const card = document.createElement('div');
         card.className = 'video-card';
         // Feature 13: Make cards focusable for keyboard nav
@@ -1327,7 +1355,7 @@ function renderNextBatch() {
         card.innerHTML = `
             <div class="thumb-wrapper" data-video-id="${v.videoId}">
                 <div class="skeleton-thumb" data-skeleton></div>
-                <img src="${thumbUrl}" alt="${v.title}" loading="lazy"
+                <img src="${thumbUrl}" alt="${safeTitle}" loading="lazy"
                      onerror="if(!this.src.includes('hqdefault')){this.src='${fallbackUrl}'}"
                      onload="var sk=this.parentElement.querySelector('[data-skeleton]');if(sk)sk.remove();"/>
                 <div class="thumb-overlay">
@@ -1337,9 +1365,9 @@ function renderNextBatch() {
                 </div>
             </div>
             <div class="card-info">
-                <div class="card-title">${v.title}</div>
+                <div class="card-title">${safeTitle}</div>
                 ${dateStr ? `<div class="card-date">${dateStr}</div>` : ''}
-                <button class="share-btn" title="Share" data-share-id="${v.videoId}" data-share-title="${v.title.replace(/"/g, '&quot;')}">
+                <button class="share-btn" title="Share" data-share-id="${v.videoId}" data-share-title="${safeTitle}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
