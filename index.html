@@ -223,9 +223,8 @@
         /* ── Family Story ── */
         .family-story {
             width: min(1180px, 100%);
-            display: grid;
-            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-            align-items: stretch;
+            display: flex;
+            flex-direction: column;
             text-align: left;
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
             border: 1px solid rgba(212, 168, 83, 0.18);
@@ -235,7 +234,6 @@
         }
 
         .family-story-image {
-            min-height: 100%;
             position: relative;
             overflow: hidden;
         }
@@ -244,22 +242,22 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent 70%, rgba(15, 15, 35, 0.28));
+            background: linear-gradient(180deg, transparent 75%, rgba(15, 15, 35, 0.3));
             pointer-events: none;
         }
 
         .family-story-image img {
             width: 100%;
-            height: 100%;
-            min-height: 680px;
+            aspect-ratio: 4 / 3;
             display: block;
             object-fit: cover;
-            object-position: 50% 50%;
+            object-position: 50% 48%;
         }
 
         .family-story-copy {
+            width: min(880px, 100%);
+            margin: 0 auto;
             padding: clamp(2rem, 4vw, 4.5rem);
-            align-self: center;
         }
 
         .family-story-copy h1 {
@@ -394,54 +392,6 @@
             10% { opacity: 0.6; }
             90% { opacity: 0.6; }
             100% { opacity: 0; transform: translateY(-20vh) scale(1); }
-        }
-
-        /* ── Scroll Indicator ── */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            animation: fade-bounce 3s ease-in-out infinite;
-        }
-
-        .scroll-indicator .mouse {
-            width: 24px;
-            height: 38px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .scroll-indicator .mouse::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 8px;
-            background: rgba(212, 168, 83, 0.6);
-            border-radius: 2px;
-            animation: scroll-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes scroll-dot {
-            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
-        }
-
-        @keyframes fade-bounce {
-            0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
-            50% { opacity: 1; transform: translateX(-50%) translateY(5px); }
         }
 
         /* ── Section Titles ── */
@@ -870,19 +820,7 @@
                 min-height: 90vh;
             }
 
-            .family-story {
-                grid-template-columns: 1fr;
-                border-radius: 20px;
-            }
-
-            .family-story-image img {
-                min-height: 0;
-                aspect-ratio: 4 / 3;
-            }
-
-            .family-story-image::after {
-                background: linear-gradient(180deg, transparent 75%, rgba(15, 15, 35, 0.3));
-            }
+            .family-story { border-radius: 20px; }
 
             .family-story-copy {
                 padding: 2rem 1.4rem 2.25rem;
@@ -930,10 +868,6 @@
 
             .dotd-link .link-label {
                 font-size: 0.6rem;
-            }
-
-            .scroll-indicator {
-                bottom: 1.5rem;
             }
 
             .section-header {
@@ -1091,10 +1025,6 @@
             </div>
         </article>
 
-        <div class="scroll-indicator">
-            <div class="mouse"></div>
-            <span>Scroll to explore</span>
-        </div>
     </section>
 
     <!-- Videos -->
