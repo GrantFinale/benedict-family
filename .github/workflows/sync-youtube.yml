@@ -7,11 +7,19 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # GitHub disables scheduled workflows after 60 days without repository
+      # activity. Re-enabling on every run resets that clock, so the sync keeps
+      # running through long gaps between uploads.
+      - name: Keep the daily schedule enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method PUT "repos/${{ github.repository }}/actions/workflows/sync-youtube.yml/enable"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
